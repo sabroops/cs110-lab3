@@ -1,0 +1,371 @@
+/* Feel free to edit CSS of body if you'd like. We provide you the light gray background color and font family in the body styling */
+body {
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  margin: 0 auto;
+  background-color: #e6ecf0;
+
+}
+
+
+
+/* TODO: Create CSS for your Twitter Mockup */
+
+/* Navbar Content */
+.center{
+  text-align: center;
+  width: 100%;
+}
+.header-wrapper{
+  z-index: 5;
+}
+.navbar a{
+  float: left;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #67757f;
+  margin-left: 30px;
+}
+.navbar-nav a:hover {
+  color: #1491e3;
+  text-decoration: underline;
+}
+.navbar-fix {
+  padding-left: 6px;
+}
+nav.navbar {
+  max-width: 1220px; /* applying max-width */
+  margin: 0 auto; /* center */
+}
+.twitter-icon [class*='icon-']{
+  height: 50px;
+  width: 50px;
+  display: inline-block;
+  text-align: center;
+  vertical-align: baseline;
+}
+.tweet-button {
+  border-radius: 25px;
+  border: solid 1px #009EEF;
+  background: #009EEF;
+  color: white;
+  width: 90px;
+  height: 30px;
+  margin-top: 5px;
+  display: flex;
+}
+.tweet-button p {
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  margin:auto;
+}
+.tweet-button:hover {
+  border-radius: 25px;
+  border: solid 1px #009EEF;
+  background: white;
+  color: #009EEF;
+  cursor: pointer;
+  width: 90px;
+  height: 30px;
+  margin-top: 5px;
+  display: flex;
+}
+
+/* Bottom Content */
+.content-wrapper {
+  margin: 56px auto;
+  color: red;
+  display: flex;
+  justify-content: space-around;
+  max-width: 1190px;
+}
+
+
+/* Left Content */
+.content-left {
+  width:290px;
+  color: black;
+  margin-left: 10px;
+  top:80px;
+}
+
+.profile-stat-back {
+  position: absolute;
+  background-color: white;
+  top: 130px;
+  height: 145px;
+  width: 290px;
+  z-index:-1;
+}
+.profile-stat-box{
+
+  width: 290px;
+  height: 35px;
+  display: flex;
+
+  justify-content:space-evenly;
+}
+.profile-sub-category{
+  width: 70px;
+
+  font-size: 11pt;
+  font-weight: bold;
+  color:#5E6E79;
+}
+
+.profile-stats{
+  width: 70px;
+  height: 30px;
+
+  font-size: 11pt;
+  font-weight: bold;
+  color:#009EEF;
+  
+}
+.banner {
+  width: 290px;
+  padding: 20px 50px;
+  position:absolute;
+  z-index:-1;
+  background-color: black;
+  height: 75px;
+}
+
+.profilepic img{
+  position: relative;
+  border: 3px solid white;
+  border-radius: 50%;
+  left: 25px;
+  top: 50px;
+}
+.profilename {
+  position: relative;
+  text-decoration: underline;
+  font-size: 11pt;
+  font-weight: bold;
+  color: black;
+  top: 10px;
+  left: 115px;
+}
+.profiletag {
+  position:relative;
+  color: gray;
+  font-size: 11pt;
+  top:-10px;
+  left:115px;
+}
+
+/* Middle Content */
+
+.content-middle-wrapper {
+  position:relative;
+  width: 610px;
+  margin-left: 1.6vh;
+
+  background-color: white;
+}
+
+.content-middle {
+  width: 610px;
+  min-height: 51px;
+  height: auto;
+  overflow: visible;
+  
+  display: flex;
+  padding-bottom: 12px;
+  border-bottom: solid 1px #E6ECF0;
+
+}
+.profile-middle-block {
+  width: 68px;
+  height: 51px;
+  
+}
+.profile-middle img{
+  margin: 8px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+}
+.post-box {
+
+  width: 550px;
+
+}
+.post-name-tag {
+  margin-top: 8px;
+  width: 300px;
+  height: 25px;
+
+  
+  display: flex;
+}
+.post-name {
+  width: fit-content;
+  height: fit-content;
+  color: black;
+  font-weight: bold;
+  font-size: 11pt;
+
+}
+.post-tag {
+  width: fit-content;
+  height: fit-content;
+  color: gray;
+  font-size: 11pt;
+  margin-left: 5px;
+}
+.post-content{
+  width: 450px;
+  height: fit-content;
+  color: black;
+  font-size: 11pt;
+  
+  margin-top: 4px;
+  word-wrap: break-word;
+}
+
+/* Right Content */
+
+.content-right-wrapper {
+  width:290px;
+  margin-left: 1.6vh!important;
+  margin-right:10px;
+  left: 5px;
+  color: black;
+  background-color: white;
+  border: solid 1px white;
+
+}
+
+.recommendation-box {
+  width: 260px;
+  height: 90px;
+  margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.recommendation-msg {
+  width: fit-content;
+  height: 30px;
+  font-size: 15pt;
+  font-weight: bold;
+
+  margin: 20px auto auto 15px;
+}
+
+.recommendation-content-box {
+
+  display: flex;
+  width: 260px;
+  height: 90px;
+
+  border-bottom: solid 1px #E6ECF0;
+
+}
+
+.recommendation-profile-pic-block {
+  
+  width: 50px;
+  height: 80px;
+  margin-top: 4px;
+}
+.recommendation-profile-pic img{
+  border-radius: 50%;
+}
+.recommendation-info-block {
+
+  height: 80px;
+  width: 250px;
+  margin-top: 4px;
+  margin-left: 15px;
+}
+.recommendation-name-tag {
+
+  width: 250px;
+  height: 25px;
+  display: flex;
+}
+.recommendation-name {
+
+  width: fit-content;
+  height: 25px;
+  font-size: 11pt;
+  font-weight: bold;
+
+}
+.recommendation-tag {
+
+
+  width: fit-content;
+  height: 25px;
+  font-size: 11pt;
+  color: gray;
+  margin-left: 5px;
+
+}
+.recommendation-button {
+  border-radius: 25px;
+  border: solid 1px #009EEF;
+  color: #009EEF;
+  width: 90px;
+  height: 30px;
+  margin-top: 5px;
+  display: flex;
+}
+.recommendation-button:hover {
+  border-radius: 25px;
+  background-color: #009EEF;
+  color:#E6ECF0;
+  cursor: pointer;
+  width: 90px;
+  height: 30px;
+  margin-top: 5px;
+  display: flex;
+}
+.recommendation-button-text {
+  font-weight: bold;
+  margin: 4px auto;
+}
+
+@media only screen and (max-width: 1200px) {
+  .content-right-wrapper {
+    display: none;
+  }
+  .recommendation-box {
+    display: none;
+}
+
+  .recommendation-msg {
+    display: none;
+}
+  .recommendation-content-box {
+    display: none;
+}
+
+  .recommendation-profile-pic-block {
+    display: none;
+}
+  .recommendation-profile-pic img {
+    display: none;
+}
+  .recommendation-info-block {
+    display: none;
+}
+  .recommendation-name-tag {
+    display: none;
+}
+  .recommendation-name {
+    display: none;
+}
+  .recommendation-tag {
+    display: none;
+}
+  .recommendation-button {
+    display: none;
+  }
+  .recommendation-button-text {
+    display: none;
+}
+  
+
+}
