@@ -1,130 +1,143 @@
 $(document).ready(function() {
-    // specify a url, in this case our web server
-    const url = "http://ec2-54-219-224-129.us-west-1.compute.amazonaws.com:2000/feed/random?q=weather";
-   
+    // Specify a url, in this case our web server
+    const url = "http://ec2-54-219-224-129.us-west-1.compute.amazonaws.com:2000/feed/random?q=weather"
+    pause = false;
+
+    // Setting an interval for fetching
     setInterval(async function() {
-        fetch(url)  
+        fetch(url)
         .then(res => res.json()) .then(data => {  
-        // do something with data
-            for(let i = 0; i < 5; i++) {
-                document.getElementsByClassName("post-content")[i].innerHTML = data.statuses[i].text;
-                //console.log(data.statuses[i].text);
-                //gets data from json at first element
-                document.getElementsByClassName("post-name")[i].innerHTML = data.statuses[i].user.name; //tweetName taken out
-                //console.log(data.statuses[i].user.created_at);
-                //second element: username
-                var date = data.statuses[i].user.created_at.slice(4,10);
-                //date = date.slice(4, 10);
-                //console.log(date);
-                document.getElementsByClassName("post-tag")[i].innerHTML = ' @' + data.statuses[i].user.screen_name + ' ' + date;
-                //console.log(document.getElementsByClassName("tweetHandle")[1].innerHTML);
-                document.getElementsByClassName("profile-middle")[i].src = data.statuses[i].user.profile_image_url;
+            // If not paused then refresh the tweets
+            if(!pause){
+                refreshTweets(data);
             }
-    
-        }, 5000);
-
-    })
-    .catch(err => {
-        // error catching
-    console.log(err) }) 
-
-
+        })
+        .catch(err => {
+            // Error catching
+            console.log(err) 
+        })
+    }, 5000);
 });
 
-
-/* event listener  (searchbar) */
-
-let searchString = "" // here we use a global variable
-
-const handleSearch = event => {
-    searchString = event.target.value.trim().toLowerCase();
+/*  
+    Searching tweet content based on input
     
-    removeAllChildNodes(document.getElementsByClassName("flex-child content-center")[0]);
-    
-    for (let i = 0; i < our_data.length; ++i) {
-        if (our_data[i].text.toLowerCase().includes(searchString)) {
-            create_elements(our_data[i]);
+    @param (implicit): Takes in text input
+    @return (implicit): Displays tweets that match the filter
+*/
+function searchTweets() {
+    var input = document.getElementById('searchbar') //searchBar
+    var filter = input.value.toLowerCase();
+    var tweets = document.getElementsByClassName('content-middle') //tweets flexTweet
+
+    for(var i = 0; i < tweets.length; i++){
+        var a = tweets[i].getElementsByClassName('post-content')[0]; // tweetText
+        var txtValue = a.textContent || a.innerText;
+        if(txtValue.toLowerCase().indexOf(filter) > -1) {
+            tweets[i].style.display = "";
+        } else {
+            tweets[i].style.display = "none";
         }
     }
-
-
-    // you may want to update the displayed HTML here too
 }
-document.getElementById("searchBar").addEventListener("input", handleSearch)
 
 
 
-/* Say you have a <div> with id 'tweet-container' in your HTML file 
-and all your tweet objects with duplicates removed are stored in the 
-tweets variable. Then, in JavaScript you could do something like this: */
+var id = [];
+const tweetContainer = document.getElementsByClassName("content-middle-wrapper"); //centerfeed
+var flip = [];
+var tweetArr = [];
 
-const tweetContainer = document.getElementsByClassName('content-middle');
-
-/**
- * Removes all existing tweets from tweetList and then append all tweets back in
- *
- * @param {Array<Object>} tweets - A list of tweets
- * @returns None, the tweets will be renewed
- */
-
-
-
+/*  
+    Searching tweet content based on input
+    
+    @param Tweets data from server
+    @return Displays tweets fetched from server, sorted in order received
+*/
 function refreshTweets(tweets) {
-    // feel free to use a more complicated heuristics like in-place-patch, for simplicity, we will clear all tweets and append all tweets back
-    // {@link https://stackoverflow.com/questions/3955229/remove-all-child-elements-of-a-dom-node-in-javascript}
-    t_status = tweets.statuses;
+    tweetStatus = tweets.statuses;
 
-    while (tweetContainer.firstChild) {
+    // Remove previous tweets
+    while (tweetContainer.firstChild){
         tweetContainer[0].removeChild(tweetContainer[0].firstChild);
     }
 
-    // create an unordered list to hold the tweets
-    // {@link https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement}
+    // Create div to hold new data
     const tweetList = document.createElement("div");
-    // append the tweetList to the tweetContainer
-    // {@link https://developer.mozilla.org/en-US/docs/Web/API/Node/appendChild}
-    tweetContainer[0].appendChild(tweetList);
+    tweetContainer[0].appendChild(tweetList); //tweetList
 
-    // all tweet objects (no duplicates) stored in tweets variable
-    
-    t_status.forEach((tweet) => {
-        var tweetInside = document.createElement("div");
-        tweetInside.className = 'tweets';
-        var tweetPicContainer = document.createElement("div");
-        var tweetPic = document.createElement("img")
+    // For each tweet we get, put it in a larger div tag
+    tweetStatus.forEach((tweet) => {
+        // Do not display duplicates
+        if(!id.includes(tweet.id_str)){
+            id.push(tweet.id_str);
+
+            // Create overall div for tweet
+            var tweetElement = document.createElement("div");
+            tweetElement.className = 'tweets';
+            var tweetPicdiv = document.createElement("div");
+
+            /* 
+                Create image tag and assign it a URL, if it's a bad URL
+                Default to Remy's profile picture if we have a bad image
+            */
+            const tweetPic = document.createElement("img");
+            tweetPic.src = tweet.user.profile_image_url;
+            // if(!URLError(tweet.user.profile_image_url)){
+            //     tweetPic.src = 'images/ratatouille.jpg';
+            // }
+            
+            // Add tweet to div and assign the class properties
+            tweetPic.className = "tweetPic";
+            tweetPicdiv.append(tweetPic);
+            tweetPicdiv.className = "profile-middle"; //tweetPicContainer
+            tweetElement.append(tweetPicdiv);
+
+            // Add username in a span
+            var tweetContent = document.createElement('div');
+            var name = document.createElement('span');
+            name.appendChild(document.createTextNode(tweet.user.name));
+            name.className = 'username post-name'; //user-name tweetName
+            tweetContent.className = 'post-box'; //tweetContentContainer
+            tweetContent.append(name);
+
+            // Concatenate date and username together in a span
+            var tweetHandle = document.createElement('span');
+            var createdDate = tweet.user.created_at.slice(4,10)
+            tweetHandle.appendChild(document.createTextNode(' @' + tweet.user.screen_name + ' ' + createdDate + ' '));
+            tweetHandle.className = 'tweetHandle';
+            tweetContent.className = 'tweetContentContainer';
+            tweetContent.append(tweetHandle);
+
+            // Throw text into a p tag and then add all elements to tweetContent
+
+            //div tag......
+            //var tweetContent = document.createElement('div');
+            //var name = document.createElement('span');
+            name.appendChild(document.createTextNode(tweet.text));
+            name.className = 'post-content'; //user-name tweetName
+            tweetContent.className = 'tweetContentContainer'; //tweetContentContainer
+            tweetContent.append(name);
 
 
+
+            // var textp = document.createElement('p');
+            // textp.appendChild(document.createTextNode(tweet.text));
+            // textp.className = 'post-content'; // tweetText
+            // tweetElement.append(textp);
+            // tweetContent.append(textp);
+            tweetElement.append(tweetContent);
+
+            // Add data to global array
+            tweetElement.className = 'content-middle'; //tweets flexTweet
+            tweetArr.push(tweetElement);
+        }
+        //console.log(tweetArr.length);
     });
 
-    // filter on search text
-    // {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter}
-    const filteredResult = tweets.filter(...);
-    // sort by date
-    // {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort}
-    const sortedResult = filteredResult.sort(compareDate); 
-
-    // execute the arrow function for each tweet
-    // {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach}
-    sortedResult.forEach(tweetObject => {
-        // create a container for individual tweet
-        const tweet = document.createElement("li");
-
-        // e.g. create a div holding tweet content
-        const tweetContent = document.createElement("div");
-        // create a text node "safely" with HTML characters escaped
-        // {@link https://developer.mozilla.org/en-US/docs/Web/API/Document/createTextNode}
-        const tweetText = document.createTextNode(tweetObject.text);
-        // append the text node to the div
-        tweetContent.appendChild(tweetText);
-
-        // you may want to put more stuff here like time, username...
-        tweet.appendChild(tweetContent);
-
-        // finally append your tweet into the tweet list
-        tweetList.appendChild(tweet);
-    });
-}
-
-function compare(a,b) {
-    if()
+    // Sort given tweets based on order received, oldest tweet at the bottom
+    for(var i = tweetArr.length-1; i >= 0; i--){
+        tweetList.appendChild(tweetArr[i]);
+        //console.log(tweetArr[i]);
+    }
 }
