@@ -72,11 +72,13 @@ nav.navbar {
 /* Bottom Content */
 .content-wrapper {
   margin: 56px auto;
-  color: red;
+  /* color: red; */
+  
   display: flex;
   justify-content: space-around;
   max-width: 1190px;
 }
+
 
 
 /* Left Content */
@@ -174,6 +176,15 @@ nav.navbar {
   border-bottom: solid 1px #E6ECF0;
 
 }
+
+span {
+  font-weight: bold;
+}
+div{
+  display: inline;
+}
+
+
 .profile-middle-block {
   width: 68px;
   height: 51px;
@@ -224,6 +235,15 @@ nav.navbar {
 }
 
 /* Right Content */
+
+.button2 {
+  background-color: #009EEF;
+  border-radius: 4px;
+  color:white;
+  text-align: center;
+  border: none;
+  margin:auto;
+}
 
 .content-right-wrapper {
   width:290px;

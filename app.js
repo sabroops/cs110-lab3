@@ -19,12 +19,27 @@ $(document).ready(function() {
     }, 5000);
 });
 
+//function for pause that changes my pause variable. Will alert user to know whether first click to pause or click to resume
+function pauseFunction(){
+    pause = !pause; //first switch pause to !pause. prev false, onclick will now be true
+    if (pause == true){
+        alert("Pause Clicked. Click the pause button again to resume!")
+
+    }else {
+        alert("Resumed")
+    }
+}
+
+
+
 /*  
-    Searching tweet content based on input
+    Search for tweets using user-inputted filter.
+    Goes away with tweet refresh unless you pause.
     
-    @param (implicit): Takes in text input
-    @return (implicit): Displays tweets that match the filter
+    @param: user text input (implicit)
+    @return: tweets that contain user input (implicit)
 */
+
 function searchTweets() {
     var input = document.getElementById('searchbar') //searchBar
     var filter = input.value.toLowerCase();
@@ -41,19 +56,20 @@ function searchTweets() {
     }
 }
 
-
+function URLError(url){
+    var http = new XMLHttpRequest();
+    http.open('HEAD', url, false);
+    http.send();
+    return (http.status != 404);
+}
 
 var id = [];
 const tweetContainer = document.getElementsByClassName("content-middle-wrapper"); //centerfeed
 var flip = [];
 var tweetArr = [];
 
-/*  
-    Searching tweet content based on input
-    
-    @param Tweets data from server
-    @return Displays tweets fetched from server, sorted in order received
-*/
+
+
 function refreshTweets(tweets) {
     tweetStatus = tweets.statuses;
 
@@ -71,73 +87,56 @@ function refreshTweets(tweets) {
         // Do not display duplicates
         if(!id.includes(tweet.id_str)){
             id.push(tweet.id_str);
-
             // Create overall div for tweet
             var tweetElement = document.createElement("div");
             tweetElement.className = 'tweets';
-            var tweetPicdiv = document.createElement("div");
+            var profilePictureDiv = document.createElement("div");
 
-            /* 
-                Create image tag and assign it a URL, if it's a bad URL
-                Default to Remy's profile picture if we have a bad image
-            */
-            const tweetPic = document.createElement("img");
-            tweetPic.src = tweet.user.profile_image_url;
-            // if(!URLError(tweet.user.profile_image_url)){
-            //     tweetPic.src = 'images/ratatouille.jpg';
-            // }
-            
-            // Add tweet to div and assign the class properties
-            tweetPic.className = "tweetPic";
-            tweetPicdiv.append(tweetPic);
-            tweetPicdiv.className = "profile-middle"; //tweetPicContainer
-            tweetElement.append(tweetPicdiv);
+            //image element; FIXME*** some users dont have a pic
+            const profilePicture = document.createElement("img");
+            profilePicture.src = tweet.user.profile_image_url;
+            profilePicture.className = "profilePicture";
+            profilePictureDiv.append(profilePicture);
+            profilePictureDiv.className = "profile-middle";
+            tweetElement.append(profilePictureDiv);
 
-            // Add username in a span
-            var tweetContent = document.createElement('div');
+            //USERNAME
+            var tweetBox = document.createElement('div');
             var name = document.createElement('span');
             name.appendChild(document.createTextNode(tweet.user.name));
-            name.className = 'username post-name'; //user-name tweetName
-            tweetContent.className = 'post-box'; //tweetContentContainer
-            tweetContent.append(name);
+            name.className = 'username post-name';
+            tweetBox.className = 'post-box'; 
+            tweetBox.append(name);
 
-            // Concatenate date and username together in a span
-            var tweetHandle = document.createElement('span');
-            var createdDate = tweet.user.created_at.slice(4,10)
-            tweetHandle.appendChild(document.createTextNode(' @' + tweet.user.screen_name + ' ' + createdDate + ' '));
-            tweetHandle.className = 'tweetHandle';
-            tweetContent.className = 'tweetContentContainer';
-            tweetContent.append(tweetHandle);
+            //  Make  profile date span
+            var screenName = document.createElement('div');
+            var tweetDate = tweet.user.created_at.slice(4,10)
+            screenName.appendChild(document.createTextNode(' @' + tweet.user.screen_name + ' ' + tweetDate + ' '));
+            screenName.className = 'screenName';
+            tweetBox.className = 'tweetBoxContainer';
+            tweetBox.append(screenName);
 
-            // Throw text into a p tag and then add all elements to tweetContent
-
-            //div tag......
-            //var tweetContent = document.createElement('div');
-            //var name = document.createElement('span');
-            name.appendChild(document.createTextNode(tweet.text));
-            name.className = 'post-content'; //user-name tweetName
-            tweetContent.className = 'tweetContentContainer'; //tweetContentContainer
-            tweetContent.append(name);
-
-
-
-            // var textp = document.createElement('p');
-            // textp.appendChild(document.createTextNode(tweet.text));
-            // textp.className = 'post-content'; // tweetText
-            // tweetElement.append(textp);
-            // tweetContent.append(textp);
-            tweetElement.append(tweetContent);
-
-            // Add data to global array
-            tweetElement.className = 'content-middle'; //tweets flexTweet
+            // TEXT
+            var tweetWords = document.createElement('p');
+            tweetWords.appendChild(document.createTextNode(tweet.text));
+            tweetWords.className = 'post-content';
+            tweetBox.className = 'tweetBoxContainer';
+            tweetBox.append(tweetWords);
+            tweetElement.append(tweetBox);
+            tweetElement.className = 'content-middle'; 
             tweetArr.push(tweetElement);
         }
-        //console.log(tweetArr.length);
     });
 
-    // Sort given tweets based on order received, oldest tweet at the bottom
-    for(var i = tweetArr.length-1; i >= 0; i--){
+    // Sort by date
+
+
+
+
+    //putting children into the one big array that will keep adding onto 
+    for(var i = (tweetArr.length-1); i >= 0; i--){
         tweetList.appendChild(tweetArr[i]);
-        //console.log(tweetArr[i]);
     }
+
+
 }
